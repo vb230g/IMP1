@@ -1,32 +1,29 @@
 import sys
 from itertools import combinations
 import math
-from a1_utils import read_input_from_cli, distance, write_output_to_file
+from a1_utils import read_input_from_cli, distance, write_output_to_file, generate_random_input_file
+
 
 def brute_force_closest_pair(points: list[tuple[float, float]]) -> tuple[float, list[tuple[tuple[float, float], tuple[float, float]]]]:
-    """
-    Find the closest pair of points using brute force.
-    
-    Args:
-        points (list[tuple[float, float]]): A list of 2D points, where each point is represented 
-                                            as a tuple of coordinates (x, y).
-                                            
-    Returns:
-        tuple[float, list[tuple[tuple[float, float], tuple[float, float]]]]:
-            - The updated minimum distance (float) between the closest pair(s) of points.
-            - A list of tuples representing the closest point pairs, where each pair is a 
-              tuple of two points ((x1, y1), (x2, y2)).
-    """
-
     min_dist = float('inf')
-    closest_pairs = []
-    
-    #TODO 
+    closest_pairs = set()  
 
-    return min_dist, closest_pairs
+    for i in range(len(points)):
+        for j in range(i + 1, len(points)):
+            p1, p2 = points[i], points[j]
+            dist = distance(p1, p2)
+            if dist < min_dist:
+                min_dist = dist
+                closest_pairs = {tuple(sorted((p1, p2)))}
+            elif math.isclose(dist, min_dist):
+                closest_pairs.add(tuple(sorted((p1, p2))))
+
+    return min_dist, list(closest_pairs)
+
 
 if __name__ == "__main__":
     try:
+        generate_random_input_file(50000,'bf.txt')
         points = read_input_from_cli()
         min_dist, closest_pairs = brute_force_closest_pair(points)
 
